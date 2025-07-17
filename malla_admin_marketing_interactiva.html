@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Malla Curricular Interactiva</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fff0f5;
+      margin: 20px;
+    }
+    h2 {
+      background-color: #e0a9c3;
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .curso {
+      display: inline-block;
+      padding: 10px 15px;
+      margin: 6px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      background-color: #f9c5d1; /* rosado */
+    }
+    .aprobado {
+      text-decoration: line-through;
+      background-color: #a8e6cf; /* verde agua */
+    }
+    .bloqueado {
+      background-color: #dab6fc; /* lila */
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular: Administración y Marketing</h1>
+  <div id="contenedor"></div>
+
+  <script>
+    const cursos = {
+      "Ciclo 1": [
+        { id: "HU625", nombre: "Comprensión y Producción de Lenguaje I" },
+        { id: "HU548", nombre: "Ética y Ciudadanía" },
+        { id: "MA384", nombre: "Fundamentos para el Cálculo" },
+        { id: "AF103", nombre: "Fundamentos de las Finanzas", req: ["MA384"] },
+        { id: "AD2511", nombre: "Intro a la Administración" },
+        { id: "AM216", nombre: "Marketing I" }
+      ],
+      "Ciclo 2": [
+        { id: "MA459", nombre: "Cálculo", req: ["MA384"] },
+        { id: "HU626", nombre: "Lenguaje II", req: ["HU625"] },
+        { id: "AF133", nombre: "Macroeconomía", req: ["AD2511"] },
+        { id: "AM217", nombre: "Marketing II", req: ["AM216"] },
+        { id: "AF141", nombre: "Matemática Financiera", req: ["AF103"] }
+      ],
+      "Ciclo 3": [
+        { id: "MA460", nombre: "Estadística Descriptiva", req: ["MA459"] },
+        { id: "HU318", nombre: "Investigación Académica", req: ["HU626"] },
+        { id: "AD2510", nombre: "Análisis de Realidad Peruana" },
+        { id: "CA142", nombre: "Contabilidad Financiera", req: ["AF103"] },
+        { id: "AM218", nombre: "Marketing III", req: ["AM217"] },
+        { id: "AF142", nombre: "Microeconomía", req: ["MA384", "AF133"] }
+      ],
+      "Ciclo 4": [
+        { id: "MA461", nombre: "Estadística Inferencial", req: ["MA460"] },
+        { id: "AM34", nombre: "Comportamiento del Consumidor", req: ["AM217"] },
+        { id: "AM231", nombre: "Derecho Comercial", req: ["AM217", "HU626"] },
+        { id: "AF140", nombre: "Finanzas Corporativas", req: ["CA142", "AF141"] },
+        { id: "CA143", nombre: "Contabilidad Gerencial", req: ["CA142"] },
+        { id: "AM222", nombre: "Investigación Cualitativa", req: ["AM218", "MA460"] }
+      ],
+      "Ciclo 5": [
+        { id: "MA368", nombre: "Métodos Cuantitativos", req: ["MA460"] },
+        { id: "AM224", nombre: "Branding", req: ["AM34"] },
+        { id: "AD170", nombre: "Diseño Organizacional", req: ["AD2511"] },
+        { id: "AH87", nombre: "Gestión del Capital Humano", req: ["AD2511"] },
+        { id: "AM225", nombre: "Investigación Cuantitativa", req: ["AM222", "MA461"] },
+        { id: "AM220", nombre: "Product Management", req: ["AM218"] }
+      ],
+      "Ciclo 6": [
+        { id: "AD213", nombre: "Administración de Operaciones", req: ["MA368"] },
+        { id: "CA177", nombre: "Análisis EE.FF.", req: ["CA143"] },
+        { id: "AM221", nombre: "Canales de Distribución", req: ["AM220"] },
+        { id: "AM219", nombre: "Marketing Digital I", req: ["AM224"] },
+        { id: "ELECTIVO1", nombre: "Electivo 1" },
+        { id: "ELECTIVO2", nombre: "Electivo 2" }
+      ],
+      "Ciclo 7": [
+        { id: "AH14", nombre: "Comportamiento Organizacional", req: ["AH87"] },
+        { id: "AD2508", nombre: "Comunicación y Liderazgo", req: [] },
+        { id: "AM232", nombre: "Comunicación de Marketing", req: ["AM224", "AM221", "AM219", "AM225"] },
+        { id: "AF176", nombre: "Evaluación de Proyectos", req: ["AF140"] },
+        { id: "AM223", nombre: "Marketing Digital II", req: ["AM219"] },
+        { id: "AM226", nombre: "Ventas y Negociación", req: ["AM221"] },
+        { id: "ELECTIVO3", nombre: "Electivo 3" }
+      ],
+      "Ciclo 8": [
+        { id: "AM229", nombre: "Dirección de Ventas", req: ["AM226"] },
+        { id: "AD2454", nombre: "Gestión de Proyectos", req: ["AD213"] },
+        { id: "AD2443", nombre: "Liderazgo y Negociación" },
+        { id: "AM116", nombre: "Marketing CRM", req: ["AM232"] },
+        { id: "AM227", nombre: "Pricing", req: ["AF142", "CA143", "AM220", "AM221"] },
+        { id: "AM228", nombre: "Trade Marketing", req: ["AM221", "AM217"] },
+        { id: "ELECTIVO4", nombre: "Electivo 4" }
+      ],
+      "Ciclo 9": [
+        { id: "AM57", nombre: "Plan de Marketing", req: ["AM227", "AM116", "AM228", "AM229", "CA177"] },
+        { id: "AD2509", nombre: "Gerencia Estratégica" },
+        { id: "VT148", nombre: "Metodología de la Investigación" },
+        { id: "ELECTIVO5", nombre: "Electivo 5" },
+        { id: "ELECTIVO6", nombre: "Electivo 6" },
+        { id: "ELECTIVO7", nombre: "Electivo 7" }
+      ],
+      "Ciclo 10": [
+        { id: "AM230", nombre: "Seminario de Tesis", req: ["VT148"] },
+        { id: "AM92", nombre: "Dirección Comercial", req: ["AM227", "AM116", "AM228", "AM229", "CA177"] },
+        { id: "AH45", nombre: "Responsabilidad Social" },
+        { id: "ELECTIVO8", nombre: "Electivo 8" },
+        { id: "ELECTIVO9", nombre: "Electivo 9" },
+        { id: "ELECTIVO10", nombre: "Electivo 10" }
+      ]
+    };
+
+    const estadoCursos = JSON.parse(localStorage.getItem("estadoCursos")) || {};
+
+    function guardarEstado() {
+      localStorage.setItem("estadoCursos", JSON.stringify(estadoCursos));
+    }
+
+    function estaAprobado(id) {
+      return estadoCursos[id] === true;
+    }
+
+    function crearCurso(curso) {
+      const btn = document.createElement("div");
+      btn.className = "curso";
+      btn.innerText = curso.nombre;
+      btn.dataset.id = curso.id;
+      btn.onclick = () => {
+        if (btn.classList.contains("bloqueado")) return;
+        estadoCursos[curso.id] = !estadoCursos[curso.id];
+        guardarEstado();
+        renderCursos();
+      };
+      return btn;
+    }
+
+    function renderCursos() {
+      const contenedor = document.getElementById("contenedor");
+      contenedor.innerHTML = "";
+      for (const ciclo in cursos) {
+        const h2 = document.createElement("h2");
+        h2.textContent = ciclo;
+        contenedor.appendChild(h2);
+
+        cursos[ciclo].forEach(curso => {
+          const btn = crearCurso(curso);
+          const requisitos = curso.req || [];
+          const bloqueado = requisitos.some(req => !estaAprobado(req));
+          if (bloqueado && !estaAprobado(curso.id)) {
+            btn.classList.add("bloqueado");
+          } else if (estaAprobado(curso.id)) {
+            btn.classList.add("aprobado");
+          }
+          contenedor.appendChild(btn);
+        });
+      }
+    }
+
+    renderCursos();
+  </script>
+</body>
+</html>
